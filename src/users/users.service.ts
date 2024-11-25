@@ -26,7 +26,7 @@ export class UsersService {
 
     return singleUser;
   }
-  // Creates a new user and adds them to the UserDB
+// Creates a new user and adds them to the UserDB
   // The user is assigned an incremented ID
   // @param body - the user data to create (from the CreateUserDto)
   // @returns - the newly created user object
@@ -45,6 +45,45 @@ export class UsersService {
 
     return user; // Return the created user
   }
+  
+  // Updates an existing user
+  // Finds the user by ID and updates their data with the request body
+  // @param id - the ID of the user to update
+  // @param body - the new data to update the user with
+  // @returns - the updated user object
+  updateUser(id: number, @Body() body: RecordStringAny): UserInterface {
+    // Find the index of the user to update
+    const userIndex = UserDB.findIndex((user) => user.id == id);
 
- 
+    // If user is not found, throw a NotFoundException
+    if (userIndex == -1) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+
+    // Spread the existing user data and the new body data to update the user
+    const user = { ...UserDB[userIndex], ...body };
+
+    // Update the user in the UserDB
+    UserDB[userIndex] = user;
+
+    return user;
+  }
+
+  
+
+  // Deletes a user by ID from the UserDB
+  // If the user is not found, throws a NotFoundException
+  // @param id - the ID of the user to delete
+  deleteUser(id: number): void {
+    // Find the index of the user to delete
+    const userIndex = UserDB.findIndex((user) => user.id == id);
+
+    // If user is not found, throw a NotFoundException
+    if (userIndex == -1) {
+      throw new NotFoundException(`User with id ${id} not found`);
+    }
+
+    // Remove the user from the UserDB
+    UserDB.splice(userIndex, 1);
+  }
 }
