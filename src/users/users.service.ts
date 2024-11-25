@@ -41,9 +41,6 @@ export class UsersService {
     // Add the new user to the UserDB
     UserDB.push(user);
 
-    console.log('user length', UserDB.length); // Log the updated user list
-    console.log('new user', user); // Log the newly created user
-
     return user; // Return the created user
   }
 
