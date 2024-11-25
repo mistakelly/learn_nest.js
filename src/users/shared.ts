@@ -6,6 +6,7 @@ export interface UserInterface {
   email?: string;
   password: string;
   [key: string]: any;
+  
 }
 
 export const UserDB: UserInterface[] = [
