@@ -26,7 +26,8 @@ export class UsersService {
 
     return singleUser;
   }
-// Creates a new user and adds them to the UserDB
+
+  // Creates a new user and adds them to the UserDB
   // The user is assigned an incremented ID
   // @param body - the user data to create (from the CreateUserDto)
   // @returns - the newly created user object
@@ -45,7 +46,7 @@ export class UsersService {
 
     return user; // Return the created user
   }
-  
+
   // Updates an existing user
   // Finds the user by ID and updates their data with the request body
   // @param id - the ID of the user to update
@@ -68,8 +69,6 @@ export class UsersService {
 
     return user;
   }
-
-  
 
   // Deletes a user by ID from the UserDB
   // If the user is not found, throws a NotFoundException
