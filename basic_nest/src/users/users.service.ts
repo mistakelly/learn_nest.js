@@ -15,7 +15,6 @@ export class UsersService {
   // @param id - the ID of the user to retrieve
   // @returns - a single user object if found
   getSingleUser(id: number): UserInterface {
-    console.log('single user', id);
     // Find the user by ID
     const singleUser = UserDB.find((user) => user.id == id);
 
