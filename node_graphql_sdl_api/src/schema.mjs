@@ -18,6 +18,10 @@ export const typeDefs = `#graphql
     author: Author!
   }
 
+  type Mutation{
+  createPost(id: ID!, name: String, email: String!, gender: String!, hobbies: [String!]): Author
+  }
+
   type Query {
     authors: [Author]
     posts: [Post]
