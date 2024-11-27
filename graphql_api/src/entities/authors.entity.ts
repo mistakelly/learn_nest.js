@@ -1,0 +1,42 @@
+export const authors = [
+  {
+    id: 1,
+    name: 'John Doe',
+    email: 'john.doe@example.com',
+    dob: '1990-05-15',
+    gender: 'Male',
+    password: 'password123', 
+  },
+  {
+    id: 2,
+    name: 'Jane Smith',
+    email: 'jane.smith@example.com',
+    dob: '1985-07-20',
+    gender: 'Female',
+    password: 'securepass456',
+  },
+  {
+    id: 3,
+    name: 'Alice Johnson',
+    email: 'alice.johnson@example.com',
+    dob: '1992-11-30',
+    gender: 'Female',
+    password: 'alicepass789',
+  },
+  {
+    id: 4,
+    name: 'Bob Brown',
+    email: 'bob.brown@example.com',
+    dob: '1988-02-25',
+    gender: 'Male',
+    password: 'bobpass101',
+  },
+  {
+    id: 5,
+    name: 'Charlie Davis',
+    email: 'charlie.davis@example.com',
+    dob: '1994-12-10',
+    gender: 'Male',
+    password: 'charliepass112',
+  },
+];
