@@ -19,7 +19,7 @@ export const typeDefs = `#graphql
   }
 
   type Mutation{
-  createPost(id: ID!, name: String, email: String!, gender: String!, hobbies: [String!]): Author
+  createAuthor(name: String, email: String!, gender: String!, hobbies: [String!]): Author
   }
 
   type Query {
