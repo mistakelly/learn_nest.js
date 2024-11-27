@@ -22,14 +22,27 @@ const resolvers = {
         },
 
         // return single post
-        postById: (_, arg) => Post.find(post => post.id == id),
+        postById: () => Post.find(post => post.id == id),
     },
+
+    // Relationships
     Author: {
-        posts: (parent) => Post.filter(post => post.authorId === parent.id)
+        posts: (parent) => Post.filter((post) => post.authorId == parent.id)
     },
 
     Post: {
-        author: (parent) => Author.find(author => author.id == parent.authorId)
+        author: (parent) => Author.find((post) => post.authorId == parent.id)
+    },
+
+    // Mutations
+    Mutation: {
+        createAuthor: (_, args) => {
+            const newUser = Author[Author.length - 1] ? { id: Author[Author.length - 1].id += 1, ...args } : { id: 1, ...args }
+
+            Author.push(newUser)
+
+            return newUser
+        }
     }
 }
 
