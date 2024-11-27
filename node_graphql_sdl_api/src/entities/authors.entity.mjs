@@ -6,6 +6,7 @@ export const Author = [
         dob: '1990-05-15',
         gender: 'Male',
         password: 'password123',
+        hobbies: ['Reading', 'Cycling', 'Hiking'],
     },
     {
         id: 2,
@@ -14,6 +15,7 @@ export const Author = [
         dob: '1985-07-20',
         gender: 'Female',
         password: 'securepass456',
+        hobbies: ['Cooking', 'Yoga', 'Gardening'],
     },
     {
         id: 3,
@@ -22,6 +24,7 @@ export const Author = [
         dob: '1992-11-30',
         gender: 'Female',
         password: 'alicepass789',
+        hobbies: ['Painting', 'Traveling', 'Photography'],
     },
     {
         id: 4,
@@ -30,6 +33,7 @@ export const Author = [
         dob: '1988-02-25',
         gender: 'Male',
         password: 'bobpass101',
+        hobbies: ['Gaming', 'Swimming', 'Woodworking'],
     },
     {
         id: 5,
@@ -38,5 +42,6 @@ export const Author = [
         dob: '1994-12-10',
         gender: 'Male',
         password: 'charliepass112',
+        hobbies: ['Running', 'Music', 'Fishing'],
     },
 ];
