@@ -4,6 +4,8 @@ export const typeDefs = `#graphql
     name: String!,
     email: String,
     gender: String!,
+    hobbies: [String!]!,
+    posts: [Post!]!
   }
 
   type Post {
@@ -12,11 +14,14 @@ export const typeDefs = `#graphql
     content: String!,
     createdAt: String!
     authorId: Int!, 
+    tags: [String!]!
+    author: [Author!]!
   }
 
   type Query {
     authors: [Author]
     posts: [Post]
-    authorById(id: ID!): Autho
+    authorById(id: ID!): Author
+    postById(id: ID!): Post
 }
 `;
