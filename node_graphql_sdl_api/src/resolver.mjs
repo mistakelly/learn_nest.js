@@ -12,7 +12,6 @@ const resolvers = {
 
         // return a single author
         authorById(_, args) {
-            console.log('args', args.id)
             return Author.find(author => author.id == args.id)
 
         },
@@ -23,13 +22,14 @@ const resolvers = {
         },
 
         // return single post
-        postById: (_, arg) => {
-            const { id } = arg
+        postById: (_, arg) => Post.find(post => post.id == id),
+    },
+    Author: {
+        posts: (parent) => Post.filter(post => post.authorId === parent.id)
+    },
 
-            return Post.find(post => post.id == id)
-        }
-
-
+    Post: {
+        author: (parent) => Author.find(author => author.id == parent.authorId)
     }
 }
 
