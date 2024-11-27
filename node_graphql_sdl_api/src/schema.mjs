@@ -20,6 +20,7 @@ export const typeDefs = `#graphql
 
   type Mutation{
   createAuthor(name: String, email: String!, gender: String!, hobbies: [String!]): Author
+  deleteAuthor(id: ID!): Author
   }
 
   type Query {
