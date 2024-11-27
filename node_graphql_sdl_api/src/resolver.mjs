@@ -42,7 +42,21 @@ const resolvers = {
             Author.push(newUser)
 
             return newUser
+        },
+
+        deleteAuthor: (_, { id }) => {
+            // Find the index of the author with the given id
+            const index = Author.findIndex(author => author.id === parseInt(id, 10));
+
+            // If the author is not found, return null or handle it as needed
+            if (index === -1) {
+                return null;
+            }
+
+            // Remove and return the deleted author 
+            return Author.splice(index, 1)[0];
         }
+
     }
 }
 
