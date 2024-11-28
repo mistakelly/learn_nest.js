@@ -110,7 +110,44 @@ const resolvers = {
             return Author.splice(authorIdx, 1)[0];
         },
 
-       
+        // POST MUTATIONS
+        /**
+         * Creates a new post and adds it to the Post array.
+         * @returns {Object} - The newly created post.
+         */
+        createPost: (_, args) => {
+            const newPost = { id: generateNewId(Post), ...args, createdAt: new Date().toISOString() };
+            Post.push(newPost);
+            return newPost;
+        },
+
+        /**
+         * Updates an existing post's details based on its ID.
+         * @returns {Object} - The updated post or `null` if not found.
+         */
+        updatePost: (_, args) => {
+            const authorIdx = findIndexById(Author, args.authorId);
+            const postIdx = findIndexById(Post, args.id);
+
+            if (authorIdx === -1 || postIdx === -1) {
+                return null;
+            }
+
+            Post[postIdx] = { ...Post[postIdx], ...args, updatedAt: new Date().toISOString() };
+            return Post[postIdx];
+        },
+
+        /**
+         * Deletes a post based on its ID.
+         * @returns {Object} - The deleted post or `null` if not found.
+         */
+        deletePost: (_, { id }) => {
+            const postIdx = findIndexById(Post, id);
+            if (postIdx === -1) {
+                return null;
+            }
+            return Post.splice(postIdx, 1)[0];
+        },
     },
 };
 
