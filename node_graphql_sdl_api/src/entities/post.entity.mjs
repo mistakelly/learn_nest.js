@@ -1,5 +1,4 @@
 export const Post = [
-    // John Doe's Posts
     {
         id: 1,
         title: 'Introduction to GraphQL',
