@@ -35,10 +35,20 @@ type Mutation {
         hobbies: [String]
     ): Author
 
+
+    # Update an existing author by ID
+    updateAuthor(
+        id: ID!,
+        name: String!,
+        email: String!,
+        gender: String!,
+        hobbies: [String]
+    ): Author
+   
     # Delete an existing author by ID
     deleteAuthor(id: ID!): Author
 
-}
+    
 
 # Query type defines read-only operations for fetching data.
 type Query {
