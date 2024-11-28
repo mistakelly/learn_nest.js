@@ -4,6 +4,7 @@ import { UserEntity } from 'src/entities/users.entity';
 
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PasswordHashingService } from './password_hashing.service';
 
 /**
  * Service for user-related operations.
@@ -14,6 +15,7 @@ export class UsersService {
   constructor(
     @InjectRepository(UserEntity)
     private readonly userRepository: Repository<UserEntity>,
+    private readonly passwordHasher: PasswordHashingService,
   ) {}
 
   /**
@@ -23,6 +25,17 @@ export class UsersService {
    */
   async createUser(args: CreateUserInput): Promise<UserEntity> {
     const newUser = this.userRepository.create(args);
+
+    // hash users password before saving to database
+
+    const hashedUserPassword = await this.passwordHasher.hashPassword(newUser.password)
+
+    newUser.password = hashedUserPassword
+
+    console.log('hasheduserpassword', hashedUserPassword)
+
+    console.log('new user password', newUser.password)
+
     return this.userRepository.save(newUser);
   }
 
