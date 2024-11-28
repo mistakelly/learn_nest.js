@@ -1,5 +1,5 @@
 // Database imports
-import { Post } from './entities/post.entity.mjs'; 
+import { Post } from './entities/post.entity.mjs';
 import { Author } from './entities/authors.entity.mjs';
 
 // Helper functions to avoid repetition
@@ -70,6 +70,9 @@ const resolvers = {
 
     // Mutation resolvers: Handle creating, updating, and deleting data
     Mutation: {
+
+        // AUTHOR MUTATIONS
+        
         /**
          * Creates a new author and adds it to the Author array.
          * @returns {Object} - The newly created author.
@@ -80,7 +83,20 @@ const resolvers = {
             return newAuthor;
         },
 
-       
+
+        /**
+              * Updates an existing author's details based on their ID.
+              * @returns {Object} - The updated author or `null` if not found.
+              */
+        updateAuthor: (_, args) => {
+            const authorIdx = findIndexById(Author, args.id);
+            if (authorIdx === -1) {
+                console.log('Author not found');
+                return null;
+            }
+            Author[authorIdx] = { ...Author[authorIdx], ...args, updatedAt: new Date().toISOString() };
+            return Author[authorIdx];
+        },
 
         /**
          * Deletes an author based on their ID.
@@ -94,7 +110,7 @@ const resolvers = {
             return Author.splice(authorIdx, 1)[0];
         },
 
-        
+       
     },
 };
 
