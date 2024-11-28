@@ -48,7 +48,26 @@ type Mutation {
     # Delete an existing author by ID
     deleteAuthor(id: ID!): Author
 
-    
+    # Create a new post
+    createPost(
+        title: String!,
+        content: String!,
+        authorId: Int!,
+        tags: [String]
+    ): Post
+
+    # Update an existing post by ID
+    updatePost(
+        id: Int!,
+        title: String!,
+        content: String!,
+        authorId: Int!,
+        tags: [String]
+    ): Post
+
+    # Delete an existing post by ID
+    deletePost(id: ID!): Post
+}
 
 # Query type defines read-only operations for fetching data.
 type Query {
