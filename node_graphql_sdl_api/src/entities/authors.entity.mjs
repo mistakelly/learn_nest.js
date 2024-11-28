@@ -7,6 +7,7 @@ export const Author = [
         gender: 'Male',
         password: 'password123',
         hobbies: ['Reading', 'Cycling', 'Hiking'],
+        createdAt: new Date('2023-01-01').toISOString(), 
     },
     {
         id: 2,
@@ -16,6 +17,7 @@ export const Author = [
         gender: 'Female',
         password: 'securepass456',
         hobbies: ['Cooking', 'Yoga', 'Gardening'],
+        createdAt: new Date('2023-02-01').toISOString(),
     },
     {
         id: 3,
@@ -25,6 +27,7 @@ export const Author = [
         gender: 'Female',
         password: 'alicepass789',
         hobbies: ['Painting', 'Traveling', 'Photography'],
+        createdAt: new Date('2023-03-01').toISOString(), 
     },
     {
         id: 4,
@@ -34,6 +37,7 @@ export const Author = [
         gender: 'Male',
         password: 'bobpass101',
         hobbies: ['Gaming', 'Swimming', 'Woodworking'],
+        createdAt: new Date('2023-04-01').toISOString(), 
     },
     {
         id: 5,
@@ -43,5 +47,6 @@ export const Author = [
         gender: 'Male',
         password: 'charliepass112',
         hobbies: ['Running', 'Music', 'Fishing'],
+        createdAt: new Date('2023-05-01').toISOString(), 
     },
 ];
