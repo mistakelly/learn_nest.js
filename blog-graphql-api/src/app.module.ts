@@ -7,9 +7,11 @@ import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 // custom imports
-import { UsersModule } from './users/users.module';
+import { UsersModule } from 'src/modules/users/users.module';
 import AppDataSource from './config/configuration';
 import { ConfigModule } from '@nestjs/config';
+import { AuthModule } from 'src/modules/auth/auth.module';
+import { AccessTokenGuard } from 'src/modules/auth/guards/jwt.guard';
 
 @Module({
   imports: [
@@ -24,12 +26,17 @@ import { ConfigModule } from '@nestjs/config';
       debug: true,
       //   disable graphql playground
       playground: false,
+      context: ({ req, res }) => ({ req, res }),
 
       plugins: [ApolloServerPluginLandingPageLocalDefault()],
     }),
 
     UsersModule,
+
+    AuthModule,
   ],
+
+  providers: [{ provide: 'APP_GUARD', useClass: AccessTokenGuard }], // protect all route
 
   exports: [],
 })
