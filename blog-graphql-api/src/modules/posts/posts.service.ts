@@ -10,6 +10,7 @@ import { DeleteResult, Repository } from 'typeorm';
 import { PostEntity } from './entities/post.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { UsersService } from '../users/services/users.service';
+import { DeletePostInput } from './dto/delete-post.input';
 
 @Injectable()
 export class PostsService {
@@ -21,7 +22,7 @@ export class PostsService {
 
   async createPost(
     createPostInput: CreatePostInput,
-    
+
     userId: string,
   ): Promise<PostEntity> {
     const user = await this.userService.findUserById(userId);
@@ -29,7 +30,7 @@ export class PostsService {
     if (!user) {
       throw new NotFoundException('User not found');
     }
-    
+
     const post = this.postRepository.create({
       ...createPostInput,
       user,
@@ -39,7 +40,7 @@ export class PostsService {
   }
 
   findAll(): Promise<PostEntity[]> {
-    return this.postRepository.find({ relations: ['user'] }); 
+    return this.postRepository.find({ relations: ['user'] });
   }
 
   async findOne(id: string): Promise<PostEntity> {
@@ -63,12 +64,14 @@ export class PostsService {
 
     const existingPost = await this.findOne(id);
 
-    const userExists = await this.userService.findUserById(userId)
+    const userExists = await this.userService.findUserById(userId);
 
-    if (!userExists){
-      throw new BadRequestException("User Not found, Kindly signup before creating a post")
+    if (!userExists) {
+      throw new BadRequestException(
+        'User Not found, Kindly signup before creating a post',
+      );
     }
-    
+
     // Check if the user owns the post
     if (existingPost.user.id !== userId) {
       throw new ForbiddenException('You are not allowed to update this post');
@@ -79,14 +82,13 @@ export class PostsService {
     return this.findOne(id);
   }
 
-  async remove(id: string, userId: string): Promise<DeleteResult> {
-    const post = await this.findOne(id);
+  async remove(deletePostInput: DeletePostInput): Promise<DeleteResult> {
+    const post = await this.findOne(deletePostInput.PostId);
 
-    // Check if the user owns the post
-    if (post.user.id !== userId) {
-      throw new ForbiddenException('You are not allowed to delete this post');
+    if (post.user.id !== deletePostInput.userId) {
+      throw new BadRequestException('You are not allowed to delete this post');
     }
 
-    return this.postRepository.delete(id);
+    return this.postRepository.delete(deletePostInput.PostId);
   }
 }

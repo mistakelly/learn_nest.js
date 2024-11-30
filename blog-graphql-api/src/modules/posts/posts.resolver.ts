@@ -5,6 +5,7 @@ import { CreatePostInput } from './dto/create-post.input';
 import { UpdatePostInput } from './dto/update-post.input';
 import { NotFoundException } from '@nestjs/common';
 import { DeleteResponse } from './entities/delete_response';
+import { DeletePostInput } from './dto/delete-post.input';
 
 @Resolver(() => PostEntity)
 export class PostsResolver {
@@ -35,7 +36,7 @@ export class PostsResolver {
   @Mutation(() => PostEntity)
   async updatePost(
     @Args('updatePostInput') updatePostInput: UpdatePostInput,
-    @Args('userId') userId: string, 
+    @Args('userId') userId: string,
   ): Promise<PostEntity> {
     console.log('inside update');
 
@@ -44,18 +45,17 @@ export class PostsResolver {
 
   @Mutation(() => DeleteResponse)
   async removePost(
-    @Args('id') id: string,
-    @Args('userId') userId: string,
+    @Args('deletePostInput') deletePostInput: DeletePostInput,
   ): Promise<DeleteResponse> {
-    const deleteResult = await this.postsService.remove(id, userId);
+    const deleteResult = await this.postsService.remove(deletePostInput);
 
     if (deleteResult.affected === 0) {
-      throw new NotFoundException(`Post with ID ${id} not found`);
+      throw new NotFoundException(`Post with ID ${deletePostInput.PostId} not found`);
     }
 
     return {
       success: true,
-      message: `Post with ID ${id} deleted successfully`,
+      message: `Post with ID ${deletePostInput.PostId} deleted successfully`,
     };
   }
 }
