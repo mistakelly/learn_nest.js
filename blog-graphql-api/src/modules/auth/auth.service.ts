@@ -5,13 +5,10 @@ import {
   Injectable,
 } from '@nestjs/common';
 
-import {
-  SignUpInput ,
-  LogInInput,
-} from 'src/shared/dtos/user.dto';
+import { SignUpInput, LogInInput } from 'src/shared/dtos/user.dto';
 
 // import { UserModel } from 'src/users/models/users.model';
-import { UserEntity } from 'src/entities/users.entity';
+import { UserEntity } from 'src/modules/users/entities/users.entity';
 import { PasswordHashingService } from '../users/services/password_hashing.service';
 import { UsersService } from 'src/modules/users/services/users.service';
 import { InjectRepository } from '@nestjs/typeorm';
