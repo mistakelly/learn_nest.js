@@ -1,24 +1,30 @@
+import { DataSource } from 'typeorm';
 import { ConfigService } from '@nestjs/config';
-import { DataSourceOptions } from 'typeorm';
 import { config } from 'dotenv';
-import { UserEntity } from 'src/entities/users.entity';
+import { UserEntity } from '../modules/users/entities/users.entity';
 
-// call config method from dotenv as Nest.js ConfigService depends on it
+// Load environment variables
 config();
-// instantiate ConfigService
+
+// Import path module
+import * as path from 'path';
+import { PostEntity } from 'src/modules/posts/entities/post.entity';
+// Create a new ConfigService instance
 const configService = new ConfigService();
 
-const AppDataSource: DataSourceOptions = {
+// Explicitly create a DataSource instance for CLI
+const AppDataSource = new DataSource({
   type: 'mysql',
   host: configService.get<string>('DB_HOSTNAME'),
   port: configService.get<number>('DB_PORT'),
   username: configService.get<string>('DB_USERNAME'),
   password: configService.get<string>('DB_PASSWORD'),
   database: configService.get<string>('DB_NAME'),
-  migrations: [],
-  entities: [UserEntity],
+  entities: [UserEntity, PostEntity],
+  migrations: [path.join(__dirname, '../database/migrations/*.{ts,js}')],
+  migrationsTableName: 'migrations',
   logging: false,
-  synchronize: true,
-};
+  synchronize: true, // Disable sync when using migrations in production
+});
 
 export default AppDataSource;
