@@ -1,5 +1,5 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
-import { UserType } from 'src/shared/gql-types/user.type';
+// import { UserType } from 'src/shared/gql-types/user.type';
 import { UsersService } from '../services/users.service';
 import { BadRequestException, NotFoundException } from '@nestjs/common';
 import { Public } from 'src/modules/auth/decorators/public.decorator';
@@ -7,7 +7,7 @@ import { UserEntity } from '../entities/users.entity';
 import { UpdateUsernameInput } from '../dtos/updateusername.dto';
 import { UpdateEmailInput } from '../dtos/updateemail.dto';
 
-@Resolver(() => UserType)
+@Resolver(() => UserEntity)
 export class UserResolver {
   constructor(private readonly userService: UsersService) {}
 
@@ -16,8 +16,8 @@ export class UserResolver {
    * @param id User's unique identifier.
    * @returns User data if found.
    */
-  @Query(() => UserType)
-  async findUserById(@Args('id') id: string): Promise<UserType> {
+  @Query(() => UserEntity)
+  async findUserById(@Args('id') id: string): Promise<UserEntity> {
     const user = await this.userService.findUserById(id);
     if (!user) {
       throw new BadRequestException('User not found');
@@ -30,8 +30,8 @@ export class UserResolver {
    * @param email User's email address.
    * @returns User data if found.
    */
-  @Query(() => UserType)
-  async findUserByEmail(@Args('email') email: string): Promise<UserType> {
+  @Query(() => UserEntity)
+  async findUserByEmail(@Args('email') email: string): Promise<UserEntity> {
     const user = await this.userService.findUserByEmail(email);
     if (!user) {
       throw new BadRequestException('User not found');
@@ -92,8 +92,8 @@ export class UserResolver {
    * @returns List of all users.
    */
   @Public()
-  @Query(() => [UserType])
-  async findAll(): Promise<UserType[]> {
+  @Query(() => [UserEntity])
+  async findAll(): Promise<UserEntity[]> {
     return this.userService.findAll();
   }
 }
