@@ -4,12 +4,9 @@ import { Args, Mutation, Query, Resolver } from '@nestjs/graphql';
 import { UsersService } from '../users/services/users.service';
 import { AuthService } from './auth.service';
 import { UserType, LoginResponseType } from '../../shared/gql-types/user.type';
-import { UserEntity } from 'src/entities/users.entity';
+import { UserEntity } from 'src/modules/users/entities/users.entity';
 import { Public } from './decorators/public.decorator';
-import {
-  SignUpInput,
-  LogInInput,
-} from '../../shared/dtos/user.dto';
+import { SignUpInput, LogInInput } from '../../shared/dtos/user.dto';
 
 @Resolver(() => UserType)
 export class AuthResolver {
@@ -21,23 +18,19 @@ export class AuthResolver {
   @Public()
   @Mutation(() => UserType)
   async signUp(@Args('input') input: SignUpInput): Promise<UserEntity> {
+    console.log('input', input);
     return await this.authService.registerUser(input);
   }
 
-  // @Public()
+  @Public()
   @Mutation(() => LoginResponseType)
   async signIn(@Args('input') args: LogInInput): Promise<LoginResponseType> {
-    const { access_token } = await this.authService.loginUser(args);
+    const { access_token, user } = await this.authService.loginUser(args);
 
     return {
       access_token,
+      user,
       message: 'Login successful',
     };
-  }
-
-  // @Public()
-  @Query(() => String)
-  async hello() {
-    return "Finally we made it ' 🚀";
   }
 }
