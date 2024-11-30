@@ -1,52 +1,99 @@
 import { Resolver, Query, Mutation, Args } from '@nestjs/graphql';
-
-// CUSTOM IMPORTS
 import { UserType } from 'src/shared/gql-types/user.type';
 import { UsersService } from '../services/users.service';
-import { BadRequestException } from '@nestjs/common';
-/**
- * Resolver for user-related GraphQL queries and mutations.
- * It connects the GraphQL schema with the service layer for user operations.
- * Each method resolver method calls a dedicated service method for handling business logic
- */
+import { BadRequestException, NotFoundException } from '@nestjs/common';
+import { Public } from 'src/modules/auth/decorators/public.decorator';
+import { UserEntity } from '../entities/users.entity';
+import { UpdateUsernameInput } from '../dtos/updateusername.dto';
+import { UpdateEmailInput } from '../dtos/updateemail.dto';
+
 @Resolver(() => UserType)
 export class UserResolver {
   constructor(private readonly userService: UsersService) {}
 
   /**
-   * GraphQL query to retrieve all users from the database.
-   *
+   * Query to retrieve a user by their ID.
+   * @param id User's unique identifier.
+   * @returns User data if found.
+   */
+  @Query(() => UserType)
+  async findUserById(@Args('id') id: string): Promise<UserType> {
+    const user = await this.userService.findUserById(id);
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+    return user;
+  }
+
+  /**
+   * Query to retrieve a user by their email.
+   * @param email User's email address.
+   * @returns User data if found.
+   */
+  @Query(() => UserType)
+  async findUserByEmail(@Args('email') email: string): Promise<UserType> {
+    const user = await this.userService.findUserByEmail(email);
+    if (!user) {
+      throw new BadRequestException('User not found');
+    }
+    return user;
+  }
+
+  /**
+   * Mutation to update a user's email.
+   * @param updateEmailInput Email update input data.
+   * @returns Updated user entity.
+   */
+  @Mutation(() => UserEntity)
+  async updateUserEmail(
+    @Args('updateEmailInput') updateEmailInput: UpdateEmailInput,
+  ): Promise<UserEntity | null> {
+    return this.userService.updateUserEmail(updateEmailInput);
+  }
+
+  /**
+   * Mutation to update a user's username.
+   * @param updateUsernameInput Username update input data.
+   * @returns Updated user entity.
+   */
+  @Mutation(() => UserEntity)
+  async updateUsername(
+    @Args('updateUsernameInput') updateUsernameInput: UpdateUsernameInput,
+  ): Promise<UserEntity | null> {
+    return this.userService.updateUsername(updateUsernameInput);
+  }
+
+  /**
+   * Mutation to delete a user by their ID.
+   * @param id User's unique identifier.
+   * @returns True if the user was deleted successfully.
+   */
+  @Mutation(() => Boolean)
+  async deleteUser(@Args('id') id: string): Promise<boolean> {
+    const userExists = await this.userService.findUserById(id);
+    if (!userExists) {
+      throw new NotFoundException(`User with id ${id} does not exist`);
+    }
+    return this.userService.deleteUser(id);
+  }
+
+  /**
+   * Public query to send a greeting message.
+   * @returns Greeting message.
+   */
+  @Public()
+  @Query(() => String)
+  async greetings() {
+    return "Greetings Sir! Hope you're enjoying your weekend and your baby boy isn’t keeping you up all night this time 😅🚀";
+  }
+
+  /**
+   * Public query to retrieve all users.
    * @returns List of all users.
    */
-
-  // TODO: IMPLEMENT VALIDATION FOR VALID INPUT TYPES EG<EMPTY EMAIL INPUT>
-
-  @Query(() => UserType)
-  async findUserById(@Args('id') id: string) {
-    const user = await this.userService.findUserById(id);
-
-    if (!user) {
-      throw new BadRequestException('user Not found');
-    }
-
-    return user;
-  }
-
-  @Query(() => UserType)
-  async findUserByEmail(@Args('id') id: string) {
-    const user = await this.userService.findUserByEmail(id);
-
-    if (!user) {
-      throw new BadRequestException('user Not found');
-    }
-
-    return user;
-  }
-
+  @Public()
   @Query(() => [UserType])
-  async findUsers(): Promise<UserType[]> {
-    return this.userService.getAllUser();
+  async findAll(): Promise<UserType[]> {
+    return this.userService.findAll();
   }
-
-  
 }
