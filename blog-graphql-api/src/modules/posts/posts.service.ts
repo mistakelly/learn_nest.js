@@ -1,26 +1,92 @@
-import { Injectable } from '@nestjs/common';
+import {
+  Injectable,
+  NotFoundException,
+  ForbiddenException,
+  BadRequestException,
+} from '@nestjs/common';
 import { CreatePostInput } from './dto/create-post.input';
 import { UpdatePostInput } from './dto/update-post.input';
+import { DeleteResult, Repository } from 'typeorm';
+import { PostEntity } from './entities/post.entity';
+import { InjectRepository } from '@nestjs/typeorm';
+import { UsersService } from '../users/services/users.service';
 
 @Injectable()
 export class PostsService {
-  create(createPostInput: CreatePostInput) {
-    return 'This action adds a new post';
+  constructor(
+    @InjectRepository(PostEntity)
+    private readonly postRepository: Repository<PostEntity>,
+    private readonly userService: UsersService,
+  ) {}
+
+  async createPost(
+    createPostInput: CreatePostInput,
+    
+    userId: string,
+  ): Promise<PostEntity> {
+    const user = await this.userService.findUserById(userId);
+
+    if (!user) {
+      throw new NotFoundException('User not found');
+    }
+    
+    const post = this.postRepository.create({
+      ...createPostInput,
+      user,
+    });
+
+    return this.postRepository.save(post);
   }
 
-  findAll() {
-    return `This action returns all posts`;
+  findAll(): Promise<PostEntity[]> {
+    return this.postRepository.find({ relations: ['user'] }); 
   }
 
-  findOne(id: number) {
-    return `This action returns a #${id} post`;
+  async findOne(id: string): Promise<PostEntity> {
+    const foundPost = await this.postRepository.findOne({
+      where: { id },
+      relations: ['user'],
+    });
+
+    if (!foundPost) {
+      throw new NotFoundException(`Post with ID ${id} not found`);
+    }
+
+    return foundPost;
   }
 
-  update(id: number, updatePostInput: UpdatePostInput) {
-    return `This action updates a #${id} post`;
+  async update(
+    updatePostInput: UpdatePostInput,
+    userId: string,
+  ): Promise<PostEntity> {
+    const { id, ...updateData } = updatePostInput;
+
+    const existingPost = await this.findOne(id);
+
+    const userExists = await this.userService.findUserById(userId)
+
+    if (!userExists){
+      throw new BadRequestException("User Not found, Kindly signup before creating a post")
+    }
+    
+    // Check if the user owns the post
+    if (existingPost.user.id !== userId) {
+      throw new ForbiddenException('You are not allowed to update this post');
+    }
+
+    await this.postRepository.update(id, updateData);
+
+    return this.findOne(id);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} post`;
+  async remove(id: string, userId: string): Promise<DeleteResult> {
+    const post = await this.findOne(id);
+
+    // Check if the user owns the post
+    if (post.user.id !== userId) {
+      throw new ForbiddenException('You are not allowed to delete this post');
+    }
+
+    return this.postRepository.delete(id);
   }
 }
