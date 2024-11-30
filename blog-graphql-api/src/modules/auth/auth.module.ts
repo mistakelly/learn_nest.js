@@ -3,7 +3,7 @@ import { AuthResolver } from './auth.resolver';
 import { AuthService } from './auth.service';
 import { UsersModule } from 'src/modules/users/users.module';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { UserEntity } from 'src/entities/users.entity';
+import { UserEntity } from 'src/modules/users/entities/users.entity';
 
 import { jwtConstants } from 'src/constants';
 import { JwtModule } from '@nestjs/jwt';
@@ -25,6 +25,7 @@ import { PassportModule } from '@nestjs/passport';
     TypeOrmModule.forFeature([UserEntity]),
   ],
   providers: [AuthService, AuthResolver, AccessTokenStrategy],
+  exports: [AuthService, AuthResolver, AccessTokenStrategy]
 })
 export class AuthModule {
   constructor() {}

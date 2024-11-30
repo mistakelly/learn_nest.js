@@ -1,5 +1,3 @@
-console.log('strategyyyyyyyyyyyyyyyyyyyyyyyyyyyyyy');
-
 import { Injectable } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { PassportStrategy } from '@nestjs/passport';
@@ -7,7 +5,6 @@ import { ExtractJwt, Strategy } from 'passport-jwt';
 import { jwtConstants } from 'src/constants';
 import { JwtPayload } from 'src/shared/types/jwt-types';
 
-console.log('jwt secret from strategy', jwtConstants.secretKey);
 const configService = new ConfigService();
 
 @Injectable()
