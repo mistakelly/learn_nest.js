@@ -1,14 +1,15 @@
-import { Controller, Body, BadRequestException } from '@nestjs/common';
+import { Controller, BadRequestException, Logger } from '@nestjs/common';
 import { AuthService } from './services/auth.service';
 import { AuthDto } from './dto/auth.dto';
 // import { UpdateAuthDto } from './dto/update-auth.dto';
 import { TypedBody, TypedRoute } from '@nestia/core';
-import typia from 'typia';
 
 // TODO: add validation constrain to password
 // FIXME: This is a bug, the username is not validated using regex defined in the dto`
 @Controller('auth')
 export class AuthController {
+  private logger = new Logger(AuthController.name);
+
   constructor(private readonly authService: AuthService) {}
 
   @TypedRoute.Post('register')
